@@ -34,9 +34,11 @@ object BookTests: Spek({
             it("should create a text file with all tokenizedBooks") {
                 assertTrue(testMapTextFile.exists())
             }
+
             it("should create a text file with contents") {
                 assertTrue(testMapTextFile.readText().isNotEmpty())
             }
+
             it("should be possible to create a map object from the created file"){
                 val bookObj = BookTexts()
                 val parsedMapFromFile = bookObj.parseMapsFromFile(testMapTextFile)

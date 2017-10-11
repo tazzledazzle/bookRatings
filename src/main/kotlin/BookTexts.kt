@@ -76,8 +76,13 @@ class BookTexts(location: String) {
     }
 
     private fun createMapFromString(s: String): Map<String, Int> {
-        //todo: Implement
-        return HashMap()
+        // in the form {k=v, ..., kn=vn}
+        val re = Regex("[{|}]")
+        val collapsedMapString = s.replace(re, "")
+        return collapsedMapString.split(",").groupBy { entry ->
+            val keyVal = entry.split("=")
+            Pair(keyVal[0], keyVal[1].toInt())
+        }.keys.toMap()
     }
 
     fun getTokenizedMaps(): List<TokenizedBook> = bookTexts

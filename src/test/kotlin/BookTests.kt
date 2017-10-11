@@ -1,4 +1,5 @@
 import groovy.util.GroovyTestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
@@ -23,13 +24,13 @@ object BookTests: Spek({
         }
     }
 
-    given("a set of books"){
+    xgiven("a set of books"){
         val inputSet = File("/Users/tschumacher/sandbox/bookRating/src/test/testBooks")
         val testMapTextFile = File("out/bookTextsMapTest.txt")
-        testMapTextFile.writeText("")
 
         on("parsing a book set and saving maps to a file") {
-            val bookTexts = BookTexts().parseBooksToMapsAndWriteToFile(inputSet, testMapTextFile )
+            BookTexts().parseBooksToMapsAndWriteToFile(inputSet, testMapTextFile )
+
             it("should create a text file with all tokenizedBooks") {
                 assertTrue(testMapTextFile.exists())
             }
@@ -37,12 +38,25 @@ object BookTests: Spek({
                 assertTrue(testMapTextFile.readText().isNotEmpty())
             }
             it("should be possible to create a map object from the created file"){
-                val parsedMapFromFile = BookTexts().parseMapsFromFile(testMapTextFile)
-                parsedMapFromFile.forEach { parsedBook ->
-                    val originalBook =
-                }
+                val bookObj = BookTexts()
+                val parsedMapFromFile = bookObj.parseMapsFromFile(testMapTextFile)
+                val originalBooks = bookObj.getTokenizedMaps()
+                assertEquals(originalBooks.size, parsedMapFromFile.size)
             }
+        }
+    }
 
+    given("a different set of books") {
+        val inputSet = File("/Users/tschumacher/sandbox/bookRating/bookTexts")
+        val mapToTextFile = File("out/bookTextsMap.txt")
+
+        on("parsing books from ${inputSet.absolutePath}") {
+            val bookTexts = BookTexts()
+            bookTexts.parseBooksToMapsAndWriteToFile(inputSet, mapToTextFile)
+
+            it("should create a text file with all tokenizedBooks") {
+                assertTrue(mapToTextFile.exists())
+            }
         }
 
     }

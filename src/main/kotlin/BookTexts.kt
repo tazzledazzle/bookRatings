@@ -50,12 +50,18 @@ class BookTexts(location: String) {
             File("out").mkdirs()
         }
 
-        val tempBookList = ArrayList<TokenizedBook>()
-        parseBooks(bookDir.absolutePath, tempBookList)
-        outFileLoc.writeText(formatTokenizedBooksIntoString(tempBookList))
+        if (outFileLoc.exists()){
+            if(bookTexts.isEmpty())
+                (bookTexts as ArrayList<TokenizedBook>).addAll(parseMapsFromFile(outFileLoc))
+        }
+        else {
+            val tempBookList = ArrayList<TokenizedBook>()
+            parseBooks(bookDir.absolutePath, tempBookList)
+            outFileLoc.writeText(formatTokenizedBooksIntoString(tempBookList))
 
-        if(bookTexts.isEmpty())
-            (bookTexts as ArrayList<TokenizedBook>).addAll(tempBookList)
+            if(bookTexts.isEmpty())
+                (bookTexts as ArrayList<TokenizedBook>).addAll(tempBookList)
+        }
     }
 
     /**
@@ -63,7 +69,7 @@ class BookTexts(location: String) {
      */
     private fun formatTokenizedBooksIntoString(tempBookList: ArrayList<TokenizedBook>): String {
         return tempBookList.groupBy { book ->
-            "${book.name},${book.tokenMap}"
+            "${book.name}-_-${book.tokenMap}"
         }.keys.toList().joinToString("\n")
     }
 
@@ -71,11 +77,16 @@ class BookTexts(location: String) {
      * create tokenized books from file
      */
     fun parseMapsFromFile(mapFile: File): List<TokenizedBook> {
-        return mapFile.readLines().groupBy { line ->
-            //todo: it feels like there's a better way to do this
-            val entry = line.split(",")
+        val listFromFile = mapFile.readLines().groupBy { line ->
+            val entry = line.split("-_-")
             TokenizedBook(entry[0], createMapFromString(entry[1]))
         }.keys.toList()
+        if (bookTexts.isEmpty()){
+            (bookTexts as ArrayList<TokenizedBook>).addAll(listFromFile)
+        }
+
+        return listFromFile
+
     }
 
     private fun createMapFromString(s: String): Map<String, Int> {
@@ -83,7 +94,11 @@ class BookTexts(location: String) {
         val re = Regex("[{|}]")
         val collapsedMapString = s.replace(re, "")
         return collapsedMapString.split(",").groupBy { entry ->
+//            println(entry)
             val keyVal = entry.split("=")
+            if (keyVal.size != 2){
+                (keyVal as ArrayList<String>).add(0," ")
+            }
             Pair(keyVal[0], keyVal[1].toInt())
         }.keys.toMap()
     }

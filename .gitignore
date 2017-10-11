@@ -1,0 +1,15 @@
+# ide support
+.gradle
+.idea
+
+# build resources
+build
+bookTexts
+bookTexts2
+src/test/testBooks
+mobi-python-master
+
+# extras
+*.iml
+*.db
+

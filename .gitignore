@@ -6,6 +6,7 @@
 build
 bookTexts
 bookTexts2
+out
 src/test/testBooks
 mobi-python-master
 

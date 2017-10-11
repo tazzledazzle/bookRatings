@@ -62,6 +62,7 @@ object BookTests: Spek({
         }
 
     }
+
     //todo: skip
     xgiven("an Html text file") {
         val tempDir = TemporaryFolder()
@@ -78,10 +79,9 @@ object BookTests: Spek({
             it("should return a count map") {
                 assertEquals(TreeMap<String, Int>().javaClass, tokenCountMap.javaClass)
             }
-
-
         }
     }
+
     //todo: skip
     xgiven("a set of books"){
         //        val bookTree = BookTexts("/Users/tschumacher/sandbox/bookRating/src/test/testBooks").getTokenizedMaps()

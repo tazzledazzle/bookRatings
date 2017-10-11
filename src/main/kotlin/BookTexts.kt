@@ -53,6 +53,9 @@ class BookTexts(location: String) {
         val tempBookList = ArrayList<TokenizedBook>()
         parseBooks(bookDir.absolutePath, tempBookList)
         outFileLoc.writeText(formatTokenizedBooksIntoString(tempBookList))
+
+        if(bookTexts.isEmpty())
+            (bookTexts as ArrayList<TokenizedBook>).addAll(tempBookList)
     }
 
     /**

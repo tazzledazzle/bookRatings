@@ -36,6 +36,12 @@ object BookTests: Spek({
             it("should create a text file with contents") {
                 assertTrue(testMapTextFile.readText().isNotEmpty())
             }
+            it("should be possible to create a map object from the created file"){
+                val parsedMapFromFile = BookTexts().parseMapsFromFile(testMapTextFile)
+                parsedMapFromFile.forEach { parsedBook ->
+                    val originalBook =
+                }
+            }
 
         }
 

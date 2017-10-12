@@ -22,9 +22,16 @@ import kotlin.experimental.and
 */
 
 fun main(args:Array<String>) {
-    for (bookFile in File("/Users/tschumacher/sandbox/bookRating/bookTexts").listFiles()) {
-
-    }
+    val bookTexts = BookTexts()
+    val inputSet = File("/Users/tschumacher/sandbox/bookRating/bookTexts")
+    val mapToTextFile = File("out/bookTextsMap.txt")
+//    bookTexts.parseBooksToMapsAndWriteToFile(inputSet, mapToTextFile)
+    val map = bookTexts.parseMapsFromFile(mapToTextFile)
+    val queryBook = TokenizedBook(File("/Users/tschumacher/Downloads/revolution.html"))
+//    queryBook.tokenMap.toList().sortedBy { (_,value) -> value }.asReversed().toMap().forEach { k, v ->
+//        println("$k :: $v")
+//    }
+    bookTexts.findSimilar(queryBook)
 }
 
 

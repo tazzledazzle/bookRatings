@@ -10,7 +10,7 @@ import org.junit.rules.TemporaryFolder
 import java.io.File
 import java.util.*
 
-object BookTests: Spek({
+object BookTextTests : Spek({
     given("a book object") {
         on("creation of a general book object"){
             val book = Book("Silverstein, Shel", "Where the Sidewalk Ends")

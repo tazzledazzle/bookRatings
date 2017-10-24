@@ -28,6 +28,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    flatDir{
+        dirs 'libs/lucene-7.0.1'
+    }
 }
 apply plugin: 'org.junit.platform.gradle.plugin'
 
@@ -46,6 +49,10 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.0"
     compile "org.xerial:sqlite-jdbc:3.8.11"
     compile 'org.jsoup:jsoup:1.10.3'
+
+    //lucene
+    compile name:'core/lucene-core-7.0.1'
+    compile name:'queryparser/lucene-queryparser-7.0.1'
 
     testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -86,17 +93,34 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-task convertMobiToText {
+
+task convertMobiToHtml {
     doLast {
-        List<String> bookPaths = fileTree(dir: "/Users/tschumacher/Documents/kindle-pack-2", includes: ["*.mobi"]).collect{ "${it.absolutePath}"}
+        List<String> bookPaths = fileTree(dir: "/Users/tschumacher/Documents/kindle-pack-2", includes: ["*.mobi"])
+                .collect{ it.absolutePath }
 
         for (book in bookPaths) {
             String bookname = book.split("/").last().replace(".mobi", "")
             println(bookname)
-            project.exec {
-                executable 'python'
-                args 'mobi-python-master/mobiunpack.py', "$book", "bookTexts2/$bookname"
+            if(!file("bookTexts2/$bookname").exists()) {
+                project.exec {
+                    executable 'python'
+                    args 'mobi-python-master/mobiunpack.py', "$book", "bookTexts2/$bookname"
+                }
             }
+        }
+    }
+}
+
+task convertHtmlToText {
+    doLast {
+        String dirLoc = "bookTexts/"
+        List<String> bookPaths = fileTree(dir: dirLoc, includes: ["**/*.html"]).collect {
+            it.absolutePath
+        }
+
+        for (path in bookPaths) {
+            String htmlFileText = Jsoup.parse(file(path).text).text()
         }
     }
 }

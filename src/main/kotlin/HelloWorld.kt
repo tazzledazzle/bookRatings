@@ -34,6 +34,5 @@ fun parseHtmlBooksToTextFiles(locDir: File) {
         val text = Jsoup.parse(File("${f.absolutePath}/${f.name}.html").readText()).text()
         File("${f.absolutePath}/${f.name}.txt").writeText(text)
     }
-
 }
 

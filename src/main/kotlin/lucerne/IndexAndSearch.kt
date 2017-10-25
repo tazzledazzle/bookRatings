@@ -21,6 +21,8 @@ import java.nio.file.Paths
 val INDEX_DIR = File("/Users/tschumacher/sandbox/bookRating/out/index").toURI()!!
 
 fun main(args:Array<String>) {
+
+    //todo: split into method
 //    val writer = createWriter()
 //
 //    val files = arrayOf(
@@ -64,6 +66,8 @@ fun main(args:Array<String>) {
 //    }
 //
 //    writer.close()
+    //todo: split into method
+
     println("querying index")
     val reader = DirectoryReader.open(dir)
     val searcher = IndexSearcher(reader)
@@ -78,6 +82,7 @@ fun main(args:Array<String>) {
         val d = searcher.doc(hit.doc)
         println("Hits: ${d.get("Title")}, Score: ${hit.score}")
     }
+    //todo: add complex query mechanism based upon SQL like syntax
 }
 
 fun addAllBooks(bookDir: File, writer: IndexWriter) {

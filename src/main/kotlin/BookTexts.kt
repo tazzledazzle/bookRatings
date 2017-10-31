@@ -28,6 +28,7 @@ class BookTexts() {
 
     fun addDoc(w: IndexWriter, title:String, loc:String){
         val doc = Document()
+        println(w)
         doc.add(TextField("title", title, Field.Store.YES))
         doc.add(TextField("contents", StringReader(Jsoup.parse(File(loc).readText()).text())))
     }

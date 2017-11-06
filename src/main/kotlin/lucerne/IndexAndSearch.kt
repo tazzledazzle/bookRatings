@@ -50,14 +50,16 @@ fun getHits(docs: TopDocs): Array<ScoreDoc> {
 fun searchAndPrintResults(query: String, dir: FSDirectory, analyzer: StandardAnalyzer, output: Boolean) {
     println("printing results")
     val searcher = IndexSearcher(DirectoryReader.open(dir))
-    val csvOut: File
+    val csvOut: File = File("build/resultsFor$query.csv")
+
     if(output){
-        csvOut = File("build/resultsFor$query.csv")
         csvOut.writeText("title,score,doc,shardIndex")
     }
+
     getHits(searchFor(query, searcher, analyzer ,100)).forEach { hit ->
         val d = searcher.doc(hit.doc)
         println("Hits: ${d.get("Title")}, Score: ${hit.score}")
+
         if(output)
             csvOut.appendText("${d.get("Title")},${hit.score},${hit.doc},${hit.shardIndex}")
     }
